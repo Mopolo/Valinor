@@ -57,16 +57,16 @@ markdown_extensions:
 
 nav:
   - Introduction: index.md
-  - Getting Started: getting-started
-  - Credits: credits
+  - Getting Started: getting-started.md
+  - Credits: credits.md
   - Usage:
-      - Validation: validation
-      - Message customization: message-customization
-      - Source: source
+      - Validation: validation.md
+      - Message customization: message-customization.md
+      - Source: source.md
   - Mapping:
-      - Construction strategy: mapping/construction-strategy
-      - Inferring interfaces: mapping/inferring-interfaces
-      - Handled types: mapping/handled-types
+      - Construction strategy: mapping/construction-strategy.md
+      - Inferring interfaces: mapping/inferring-interfaces.md
+      - Handled types: mapping/handled-types.md
   - Other:
-      - Performance & caching: other/performance-and-cache
-      - Static analysis: other/static-analysis
+      - Performance & caching: other/performance-and-cache.md
+      - Static analysis: other/static-analysis.md
