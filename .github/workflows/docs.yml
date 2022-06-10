@@ -65,15 +65,16 @@ jobs:
         env:
           SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY }}
         run: |
-          git fetch origin gh-pages --verbose
-          
-          git remote add doc git@github.com:Mopolo/Valinor-docs-test.git
-          
           # Setup SSH deploy key
           mkdir -p ~/.ssh
           echo "${SSH_DEPLOY_KEY}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H github.com > ~/.ssh/known_hosts
+          
+          git remote add doc git@github.com:Mopolo/Valinor-docs-test.git
+          
+          git fetch origin gh-pages --verbose
+          git fetch doc gh-pages --verbose
           
           # Check if the "latest" alias exists
           VALINOR_HAS_LATEST=$(mike list --config-file docs/mkdocs.yml --rebase | grep latest)
