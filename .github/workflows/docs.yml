@@ -5,23 +5,37 @@ on:
       - published
 
 jobs:
-  build:
-    name: Deploy docs
+  check:
+    name: Prepare
     runs-on: ubuntu-latest
+    outputs:
+      status: ${{ steps.check.conclusion }}
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          submodules: recursive #todo
 
       - name: Find version
         id: get_version
         uses: battila7/get-version-action@v2
 
       - name: Version format check
-        run: if [ "${{ steps.get_version.outputs.is-semver }}" = "" ]; then exit 0; fi
+        id: check
+        run: if [ "${{ steps.get_version.outputs.is-semver }}" = "true" ]; then echo "ok"; fi
 
-      - run: echo "VALINOR_VERSION=${{ steps.get_version.outputs.major }}.${{ steps.get_version.outputs.minor }}" >> $GITHUB_ENV
+      - run: |
+          echo "VALINOR_VERSION=${{ steps.get_version.outputs.major }}.${{ steps.get_version.outputs.minor }}" >> $GITHUB_ENV
+          echo "VALINOR_TAG=${{ steps.get_version.outputs.version-without-v }}" >> $GITHUB_ENV
+
+  build:
+    name: Deploy docs
+    runs-on: ubuntu-latest
+    needs: check
+    if: needs.check.outputs.status == 'ok'
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -29,8 +43,7 @@ jobs:
           python-version: "3.x"
 
       - name: Install dependencies
-        run: |
-          pip install -r docs/requirements.txt
+        run: pip install -r docs/requirements.txt
 
       - name: Set up git author
         uses: oleksiyrudenko/gha-git-credentials@v2
@@ -50,12 +63,9 @@ jobs:
           
           mike set-default latest --config-file docs/mkdocs.yml
           
-          if [ "${{ steps.latest.outputs.release }}" = "${{ steps.get_version.outputs.version-without-v }}" ]
+          if [ "${{ steps.latest.outputs.release }}" = "$VALINOR_TAG" ]
           then
-            echo "a"
-            mike deploy $VALINOR_VERSION latest --config-file docs/mkdocs.yml --update-aliases --title="latest ($VALINOR_VERSION)" --push --rebase
-            echo "c"
+            mike deploy $VALINOR_VERSION latest --config-file docs/mkdocs.yml --update-aliases --push --rebase
           else
-            echo "e"
             mike deploy $VALINOR_VERSION --config-file docs/mkdocs.yml --push --rebase
           fi
