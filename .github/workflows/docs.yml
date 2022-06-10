@@ -71,13 +71,14 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H github.com > ~/.ssh/known_hosts
           
+          # Add the doc repo as a remote
           git remote add doc git@github.com:Mopolo/Valinor-docs-test.git
           
-          git fetch origin gh-pages --verbose
+          # Fetch the doc repo latest changes
           git fetch doc gh-pages --verbose
           
           # Check if the "latest" alias exists
-          VALINOR_HAS_LATEST=$(mike list --config-file docs/mkdocs.yml --rebase | grep latest)
+          VALINOR_HAS_LATEST=$(mike list --config-file docs/mkdocs.yml --rebase --remote doc | grep latest)
           
           # If so then it is set as the default version (to enable the index redirect)
           if [ "$VALINOR_HAS_LATEST" != "" ]
