@@ -21,6 +21,8 @@ jobs:
       - name: Version format check
         run: if [ "${{ steps.get_version.outputs.is-semver }}" = "false" ]; then exit 1; fi
 
+      - run: echo "VALINOR_VERSION=${{ steps.get_version.outputs.major }}.${{ steps.get_version.outputs.minor }}" >> $GITHUB_ENV
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -38,7 +40,7 @@ jobs:
       - name: Deploy docs
         run: |
           git fetch origin gh-pages --verbose
-          mike deploy --push --rebase ${{ steps.get_version.outputs.major }}.${{ steps.get_version.outputs.minor }} --config-file docs/mkdocs.yml
+          mike deploy $VALINOR_VERSION --config-file docs/mkdocs.yml --push --rebase
 
       - name: Find latest release
         id: latest
@@ -51,8 +53,6 @@ jobs:
         run: |
           if [ "${{ steps.latest.outputs.release }}" = "${{ steps.get_version.outputs.version-without-v }}" ]
           then
-            echo "OK"
-            mike set-default --push --rebase ${{ steps.get_version.outputs.major }}.${{ steps.get_version.outputs.minor }} --config-file docs/mkdocs.yml
-          else
-            echo "KO"
+            mike set-default $VALINOR_VERSION --config-file docs/mkdocs.yml --push --rebase
+            mike alias $VALINOR_VERSION latest --config-file docs/mkdocs.yml --push --rebase
           fi
