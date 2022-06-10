@@ -47,7 +47,7 @@ jobs:
       - name: Set default version
         run: |
           echo "VALINOR_TITLE=$VALINOR_VERSION" >> $GITHUB_ENV
-          echo "VALINOR_ALIAS=$VALINOR_VERSION" >> $GITHUB_ENV
+          echo "VALINOR_ALIAS=" >> $GITHUB_ENV
           
           if [ "${{ steps.latest.outputs.release }}" = "${{ steps.get_version.outputs.version-without-v }}" ]
           then
