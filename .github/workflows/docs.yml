@@ -68,7 +68,7 @@ jobs:
           if [ "${{ steps.latest.outputs.release }}" = "${{ needs.check.outputs.tag }}" ]
           then
             mike deploy ${{ needs.check.outputs.version }} latest --config-file docs/mkdocs.yml --update-aliases
-            mike set-default latest --config-file docs/mkdocs.yml --push --rebase
+            mike set-default 0.16 --config-file docs/mkdocs.yml --push --rebase
           else
             mike deploy ${{ needs.check.outputs.version }} --config-file docs/mkdocs.yml --push --rebase
           fi
