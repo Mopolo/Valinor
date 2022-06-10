@@ -88,7 +88,9 @@ jobs:
           
           if [ "${{ steps.latest.outputs.release }}" = "${{ needs.check.outputs.tag }}" ]
           then
+            # Here we deploy a new latest version
             mike deploy ${{ needs.check.outputs.version }} latest --config-file docs/mkdocs.yml --update-aliases --push --remote doc
           else
+            # Here we deploy a version that's not the latest one
             mike deploy ${{ needs.check.outputs.version }} --config-file docs/mkdocs.yml --push --remote doc
           fi
