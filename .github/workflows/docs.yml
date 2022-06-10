@@ -79,9 +79,8 @@ jobs:
       - run: mike list --config-file docs/mkdocs.yml --rebase --remote doc
 
       - run: |
-          VALINOR_HAS_LATEST=$(mike list --config-file docs/mkdocs.yml --rebase --remote doc | grep latest)
-          echo "aaaaaa"
-          echo $VALINOR_HAS_LATEST
+          VALINOR_HAS_LATEST=$(mike list --config-file docs/mkdocs.yml --rebase --remote doc | grep latest) || true
+          
           # If so then it is set as the default version (to enable the index redirect)
           if [ "${VALINOR_HAS_LATEST}" != "" ]
           then
