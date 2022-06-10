@@ -50,8 +50,8 @@ jobs:
           
           if [ "${{ steps.latest.outputs.release }}" = "${{ steps.get_version.outputs.version-without-v }}" ]
           then
-            mike deploy $VALINOR_VERSION latest --config-file docs/mkdocs.yml --update-aliases
             mike set-default $VALINOR_VERSION --config-file docs/mkdocs.yml
+            mike deploy $VALINOR_VERSION latest --config-file docs/mkdocs.yml --update-aliases
             mike retitle $VALINOR_VERSION "latest ($VALINOR_VERSION)" --config-file docs/mkdocs.yml --push --rebase
           else
             mike deploy $VALINOR_VERSION --config-file docs/mkdocs.yml --push --rebase
