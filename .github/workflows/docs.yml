@@ -69,13 +69,20 @@ jobs:
           
           git remote add doc git@github.com:Mopolo/Valinor-docs-test.git
           
-          # test
+          # Setup SSH deploy key
           mkdir -p ~/.ssh
           echo "${SSH_DEPLOY_KEY}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H github.com > ~/.ssh/known_hosts
           
-          mike set-default latest --config-file docs/mkdocs.yml --rebase --remote doc || true
+          # Check if the "latest" alias exists
+          VALINOR_HAS_LATEST=$(mike list --config-file docs/mkdocs.yml --rebase | grep latest)
+          
+          # If so then it is set as the default version (to enable the index redirect)
+          if [ "$VALINOR_HAS_LATEST" != "" ]
+          then
+            mike set-default latest --config-file docs/mkdocs.yml --rebase --remote doc
+          fi
           
           if [ "${{ steps.latest.outputs.release }}" = "${{ needs.check.outputs.tag }}" ]
           then
