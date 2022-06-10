@@ -44,20 +44,15 @@ jobs:
           repository: ${{ github.repository }}
           excludes: draft
 
-      - name: Set default version
-        run: |
-          echo "VALINOR_TITLE=$VALINOR_VERSION" >> $GITHUB_ENV
-          echo "VALINOR_ALIAS=" >> $GITHUB_ENV
-          
-          if [ "${{ steps.latest.outputs.release }}" = "${{ steps.get_version.outputs.version-without-v }}" ]
-          then
-            echo "VALINOR_ALIAS=latest" >> $GITHUB_ENV
-            echo "VALINOR_TITLE=latest ($VALINOR_VERSION)" >> $GITHUB_ENV
-            mike set-default $VALINOR_VERSION --config-file docs/mkdocs.yml
-          fi
-
       - name: Deploy docs
         run: |
           git fetch origin gh-pages --verbose
-          mike deploy $VALINOR_VERSION $VALINOR_ALIAS --config-file docs/mkdocs.yml
-          mike retitle $VALINOR_VERSION "$VALINOR_TITLE" --config-file docs/mkdocs.yml --push --rebase
+          
+          if [ "${{ steps.latest.outputs.release }}" = "${{ steps.get_version.outputs.version-without-v }}" ]
+          then
+            mike deploy $VALINOR_VERSION latest --config-file docs/mkdocs.yml
+            mike set-default $VALINOR_VERSION --config-file docs/mkdocs.yml
+            mike retitle $VALINOR_VERSION "latest ($VALINOR_VERSION)" --config-file docs/mkdocs.yml --push --rebase
+          else
+            mike deploy $VALINOR_VERSION --config-file docs/mkdocs.yml
+          fi
