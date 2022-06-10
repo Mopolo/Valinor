@@ -60,4 +60,4 @@ jobs:
         run: |
           git fetch origin gh-pages --verbose
           mike deploy $VALINOR_VERSION $VALINOR_ALIAS --config-file docs/mkdocs.yml
-          mike retitle $VALINOR_VERSION $VALINOR_TITLE --config-file docs/mkdocs.yml --push --rebase
+          mike retitle $VALINOR_VERSION "$VALINOR_TITLE" --config-file docs/mkdocs.yml --push --rebase
