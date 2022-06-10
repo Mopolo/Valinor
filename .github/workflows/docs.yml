@@ -30,9 +30,10 @@ jobs:
       - name: Set up git author
         uses: oleksiyrudenko/gha-git-credentials@v2
         with:
-#          name: ${{ github.actor }}
-#          email: ${{ github.actor }}@users.noreply.github.com
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy docs
         run: mike deploy --push ${{ steps.get_version.outputs.major }}.${{ steps.get_version.outputs.minor }} --config-file docs/mkdocs.yml
+
+      - name: Set default version
+        run: mike set-default --push ${{ steps.get_version.outputs.major }}.${{ steps.get_version.outputs.minor }} --config-file docs/mkdocs.yml
