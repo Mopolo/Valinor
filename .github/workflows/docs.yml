@@ -39,4 +39,17 @@ jobs:
         run: |
           git fetch origin gh-pages --verbose
           mike deploy --push --rebase ${{ steps.get_version.outputs.major }}.${{ steps.get_version.outputs.minor }} --config-file docs/mkdocs.yml
-          mike set-default --push --rebase ${{ steps.get_version.outputs.major }}.${{ steps.get_version.outputs.minor }} --config-file docs/mkdocs.yml
+
+      - name: Find latest release
+        id: latest
+        uses: pozetroninc/github-action-get-latest-release@v0.6.0
+        with:
+          repository: ${{ github.repository }}
+          excludes: draft
+
+      - name: Set default version
+        run: |
+          if [ "${{ steps.keydb.outputs.release }}" = "${{ steps.get_version.outputs.version-without-v }}" ]
+          then
+            mike set-default --push --rebase ${{ steps.get_version.outputs.major }}.${{ steps.get_version.outputs.minor }} --config-file docs/mkdocs.yml
+          fi
