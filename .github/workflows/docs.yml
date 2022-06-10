@@ -78,6 +78,8 @@ jobs:
           # Fetch the doc repo latest changes
           git fetch doc gh-pages --verbose
           
+          mike list --config-file docs/mkdocs.yml --rebase --remote doc
+          
           # Check if the "latest" alias exists
           VALINOR_HAS_LATEST=$(mike list --config-file docs/mkdocs.yml --rebase --remote doc | grep latest)
           
