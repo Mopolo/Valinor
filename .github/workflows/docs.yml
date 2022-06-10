@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       status: ${{ steps.check.outputs.status }}
+      version: ${{ steps.check.outputs.version }}
+      tag: ${{ steps.check.outputs.tag }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -25,11 +27,9 @@ jobs:
           if [ "${{ steps.get_version.outputs.is-semver }}" == "true" ]
           then
             echo "::set-output name=status::ok"
+            echo "::set-output name=version::${{ steps.get_version.outputs.major }}.${{ steps.get_version.outputs.minor }}"
+            echo "::set-output name=tag::${{ steps.get_version.outputs.version-without-v }}"
           fi
-
-      - run: |
-          echo "VALINOR_VERSION=${{ steps.get_version.outputs.major }}.${{ steps.get_version.outputs.minor }}" >> $GITHUB_ENV
-          echo "VALINOR_TAG=${{ steps.get_version.outputs.version-without-v }}" >> $GITHUB_ENV
 
   build:
     name: Deploy docs
@@ -67,9 +67,9 @@ jobs:
           
           mike set-default latest --config-file docs/mkdocs.yml
           
-          if [ "${{ steps.latest.outputs.release }}" = "$VALINOR_TAG" ]
+          if [ "${{ steps.latest.outputs.release }}" = "${{ needs.check.outputs.tag }}" ]
           then
-            mike deploy $VALINOR_VERSION latest --config-file docs/mkdocs.yml --update-aliases --push --rebase
+            mike deploy ${{ needs.check.outputs.version }} latest --config-file docs/mkdocs.yml --update-aliases --push --rebase
           else
-            mike deploy $VALINOR_VERSION --config-file docs/mkdocs.yml --push --rebase
+            mike deploy ${{ needs.check.outputs.version }} --config-file docs/mkdocs.yml --push --rebase
           fi
