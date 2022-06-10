@@ -49,10 +49,11 @@ jobs:
           if [ "${{ steps.latest.outputs.release }}" = "${{ steps.get_version.outputs.version-without-v }}" ]
           then
             mike set-default $VALINOR_VERSION --config-file docs/mkdocs.yml
+            mike alias $VALINOR_VERSION latest --config-file docs/mkdocs.yml
             mike retitle $VALINOR_VERSION "latest ($VALINOR_VERSION)" --config-file docs/mkdocs.yml
           fi
 
       - name: Deploy docs
         run: |
           git fetch origin gh-pages --verbose
-          mike deploy $VALINOR_VERSION --config-file docs/mkdocs.yml --push --rebase
+          mike deploy $VALINOR_VERSION latest --config-file docs/mkdocs.yml --push --rebase
