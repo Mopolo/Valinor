@@ -21,7 +21,11 @@ jobs:
 
       - name: Version format check
         id: check
-        run: if [ "${{ steps.get_version.outputs.is-semver }}" = "true" ]; then echo "ok"; fi
+        run: |
+          if [ "${{ steps.get_version.outputs.is-semver }}" = "true" ]
+          then
+            echo "VALINOR_STATUS=ok" >> $GITHUB_ENV
+          fi
 
       - run: |
           echo "VALINOR_VERSION=${{ steps.get_version.outputs.major }}.${{ steps.get_version.outputs.minor }}" >> $GITHUB_ENV
@@ -31,7 +35,7 @@ jobs:
     name: Deploy docs
     runs-on: ubuntu-latest
     needs: check
-    if: needs.check.outputs.result == 'ok'
+    if: $VALINOR_STATUS == 'ok'
     steps:
       - uses: actions/checkout@v3
         with:
