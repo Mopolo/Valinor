@@ -67,6 +67,11 @@ jobs:
           
           git remote add doc git@github.com:Mopolo/Valinor-docs-test.git
           
+          mkdir -p ~/.ssh
+          echo "${SSH_DEPLOY_KEY}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H github.com > ~/.ssh/known_hosts
+          
           if [ "${{ steps.latest.outputs.release }}" = "${{ needs.check.outputs.tag }}" ]
           then
             mike deploy ${{ needs.check.outputs.version }} latest --config-file docs/mkdocs.yml --update-aliases --push --rebase --remote doc
