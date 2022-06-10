@@ -65,7 +65,7 @@ jobs:
         run: |
           git fetch origin gh-pages --verbose
           
-          mike set-default 0.8 --config-file docs/mkdocs.yml --rebase
+          mike set-default latest --config-file docs/mkdocs.yml --rebase
           
           if [ "${{ steps.latest.outputs.release }}" = "${{ needs.check.outputs.tag }}" ]
           then
