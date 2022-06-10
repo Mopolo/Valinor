@@ -51,5 +51,8 @@ jobs:
         run: |
           if [ "${{ steps.latest.outputs.release }}" = "${{ steps.get_version.outputs.version-without-v }}" ]
           then
+            echo "OK"
             mike set-default --push --rebase ${{ steps.get_version.outputs.major }}.${{ steps.get_version.outputs.minor }} --config-file docs/mkdocs.yml
+          else
+            echo "KO"
           fi
