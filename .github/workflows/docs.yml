@@ -54,5 +54,5 @@ jobs:
             mike set-default $VALINOR_VERSION --config-file docs/mkdocs.yml
             mike retitle $VALINOR_VERSION "latest ($VALINOR_VERSION)" --config-file docs/mkdocs.yml --push --rebase
           else
-            mike deploy $VALINOR_VERSION --config-file docs/mkdocs.yml
+            mike deploy $VALINOR_VERSION --config-file docs/mkdocs.yml --push --rebase
           fi
