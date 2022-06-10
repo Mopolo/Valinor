@@ -73,7 +73,7 @@ jobs:
           ssh-keyscan -H github.com > ~/.ssh/known_hosts
           
           # Add the doc repo as a remote
-          git remote add doc $DEPLOY_REPOSITORY
+          git remote add doc git@github.com:Mopolo/valinor-test-doc.git
           
           # Fetch the doc repo latest changes
           git fetch doc gh-pages --verbose
