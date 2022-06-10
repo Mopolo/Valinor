@@ -83,7 +83,7 @@ jobs:
           # If so then it is set as the default version (to enable the index redirect)
           if [ "$VALINOR_HAS_LATEST" != "" ]
           then
-            mike set-default latest --config-file docs/mkdocs.yml --rebase --remote doc
+            mike set-default latest --config-file docs/mkdocs.yml --remote doc
           fi
           
           if [ "${{ steps.latest.outputs.release }}" = "${{ needs.check.outputs.tag }}" ]
