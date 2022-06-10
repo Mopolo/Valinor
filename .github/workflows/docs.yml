@@ -84,9 +84,11 @@ jobs:
           # If so then it is set as the default version (to enable the index redirect)
           if [ "$VALINOR_HAS_LATEST" != "" ]
           then
+            echo "Set latest as default"
             mike set-default latest --config-file docs/mkdocs.yml --remote doc
           fi
-          
+
+      - run: |
           if [ "${{ steps.latest.outputs.release }}" = "${{ needs.check.outputs.tag }}" ]
           then
             # Here we deploy a new latest version
