@@ -49,7 +49,7 @@ jobs:
 
       - name: Set default version
         run: |
-          if [ "${{ steps.keydb.outputs.release }}" = "${{ steps.get_version.outputs.version-without-v }}" ]
+          if [ "${{ steps.latest.outputs.release }}" = "${{ steps.get_version.outputs.version-without-v }}" ]
           then
             mike set-default --push --rebase ${{ steps.get_version.outputs.major }}.${{ steps.get_version.outputs.minor }} --config-file docs/mkdocs.yml
           fi
