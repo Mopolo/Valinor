@@ -19,7 +19,7 @@ jobs:
         uses: battila7/get-version-action@v2
 
       - name: Version format check
-        run: if [ "${{ steps.get_version.outputs.is-semver }}" = "false" ]; then exit 0; fi
+        run: if [ "${{ steps.get_version.outputs.is-semver }}" = "" ]; then exit 0; fi
 
       - run: echo "VALINOR_VERSION=${{ steps.get_version.outputs.major }}.${{ steps.get_version.outputs.minor }}" >> $GITHUB_ENV
 
