@@ -64,6 +64,7 @@ jobs:
       - name: Deploy docs
         env:
           SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY }}
+          DEPLOY_REPOSITORY: ${{ secrets.DEPLOY_REPOSITORY }}
         run: |
           # Setup SSH deploy key
           mkdir -p ~/.ssh
@@ -72,7 +73,7 @@ jobs:
           ssh-keyscan -H github.com > ~/.ssh/known_hosts
           
           # Add the doc repo as a remote
-          git remote add doc git@github.com:Mopolo/Valinor-docs-test.git
+          git remote add doc $DEPLOY_REPOSITORY
           
           # Fetch the doc repo latest changes
           git fetch doc gh-pages --verbose
