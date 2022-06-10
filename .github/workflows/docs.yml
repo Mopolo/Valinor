@@ -70,7 +70,7 @@ jobs:
           git remote add doc git@github.com:Mopolo/Valinor-docs-test.git
           
           mkdir -p ~/.ssh
-          echo "$SSH_DEPLOY_KEY" > ~/.ssh/id_rsa
+          echo "${SSH_DEPLOY_KEY}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H github.com > ~/.ssh/known_hosts
           
