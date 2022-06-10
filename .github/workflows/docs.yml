@@ -1,19 +1,45 @@
 name: Publish docs via GitHub Pages
 on:
-  push:
-    branches:
-      - docs
+  release:
+    types:
+      - published
 
 jobs:
   build:
     name: Deploy docs
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout main
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - name: Deploy docs
-        uses: mhausenblas/mkdocs-deploy-gh-pages@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CONFIG_FILE: docs/mkdocs.yml
+      - name: Find version
+        uses: battila7/get-version-action@v2
+
+      - run: echo ${{ steps.get_version.outputs.version-without-v }}
+      - run: echo ${{ steps.get_version.outputs.is-semver }}
+      - run: echo ${{ steps.get_version.outputs.major }}
+      - run: echo ${{ steps.get_version.outputs.minor }}
+
+      - name: Version format check
+        run: if [ "${{ steps.get_version.outputs.is-semver }}" = "true" ]; then exit 1; fi
+
+#      - name: Set up Python
+#        uses: actions/setup-python@v4
+#        with:
+#          python-version: "3.x"
+#
+#      - name: Install dependencies
+#        run: |
+#          pip install -r docs/requirements.txt
+#
+#      - name: Set up git author
+#        uses: oleksiyrudenko/gha-git-credentials@v2
+#        with:
+##          name: ${{ github.actor }}
+##          email: ${{ github.actor }}@users.noreply.github.com
+#          token: ${{ secrets.GITHUB_TOKEN }}
+
+#      - name: Deploy docs
+#        uses: mhausenblas/mkdocs-deploy-gh-pages@master
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          CONFIG_FILE: docs/mkdocs.yml

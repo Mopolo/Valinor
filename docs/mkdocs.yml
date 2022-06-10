@@ -12,6 +12,8 @@ extra:
       link: https://github.com/CuyZ
     - icon: fontawesome/solid/globe
       link: https://cuyz.io
+  version:
+    provider: mike
 
 theme:
   name: material
